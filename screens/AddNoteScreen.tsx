@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -25,13 +25,13 @@ const AddNoteScreen = () => {
         "Please enter a title for your note.",
         [
           {
-            text: "OK", // Button text
-            onPress: () => console.log("OK Pressed"), // Action when "OK" is pressed
+            text: "OK",
+            onPress: () => console.log("OK Pressed"),
           },
         ],
-        { cancelable: false }, // Disallow dismissing the alert by tapping outside
+        { cancelable: false },
       );
-      return; // Don't continue if the title is missing
+      return;
     }
     create(db, note.title, note.note);
     nav.navigate("Home" as never);

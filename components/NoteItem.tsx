@@ -6,12 +6,13 @@ import { useNavigation } from "@react-navigation/native";
 import { Note } from "../types/note";
 import { useNotes } from "../services/useNote";
 import { db } from "../sqlite/sqlite";
+import { NavigationProp } from "@react-navigation/native";
 type NoteItemProps = {
   note: Note;
 };
 
 const NoteItem = ({ note }: NoteItemProps) => {
-  const nav = useNavigation();
+  const nav = useNavigation<NavigationProp<any>>();
   const { delete_ } = useNotes();
   const handleDelete = async () => {
     await delete_(db, note.id);
@@ -19,7 +20,11 @@ const NoteItem = ({ note }: NoteItemProps) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        nav.navigate("EditNote" as never);
+        nav.navigate("EditNote", {
+          title: note.title,
+          id: note.id,
+          note: note.note,
+        });
       }}
       style={[styles.root]}
     >
