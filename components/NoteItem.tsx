@@ -7,12 +7,15 @@ import { Note } from "../types/note";
 import { useNotes } from "../services/useNote";
 import { db } from "../sqlite/sqlite";
 import { NavigationProp } from "@react-navigation/native";
+import { useSetting } from "../context/SettingContext";
 type NoteItemProps = {
   note: Note;
 };
 
 const NoteItem = ({ note }: NoteItemProps) => {
   const nav = useNavigation<NavigationProp<any>>();
+  const { mode, fontSize, changeFontSize, switchTheme } = useSetting();
+
   const { delete_ } = useNotes();
   const handleDelete = async () => {
     await delete_(db, note.id);
@@ -26,14 +29,29 @@ const NoteItem = ({ note }: NoteItemProps) => {
           note: note.note,
         });
       }}
-      style={[styles.root]}
+      style={[
+        styles.root,
+        { borderColor: mode === "DARK" ? "white" : "black" },
+      ]}
     >
       <View style={[styles.noteContainer]}>
-        <Text style={[styles.title]}>{note.title}</Text>
-        <Text style={[styles.note]}>{note.note}</Text>
+        <Text
+          style={[styles.title, { color: mode === "DARK" ? "white" : "black" }]}
+        >
+          {note.title}
+        </Text>
+        <Text
+          style={[styles.note, { color: mode === "DARK" ? "white" : "black" }]}
+        >
+          {note.note}
+        </Text>
       </View>
       <TouchableOpacity onPress={handleDelete}>
-        <FontAwesome name="trash-o" size={24} color="black" />
+        <FontAwesome
+          name="trash-o"
+          size={24}
+          color={mode === "DARK" ? "white" : "black"}
+        />
       </TouchableOpacity>
     </TouchableOpacity>
   );

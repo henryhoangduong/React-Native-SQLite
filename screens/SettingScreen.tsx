@@ -1,36 +1,61 @@
 import { StyleSheet, Text, View, Switch } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "@react-native-community/slider";
-
+import { useSetting } from "../context/SettingContext";
 const SettingScreen = () => {
-  const [fontSize, setFontSize] = useState(0);
+  const { mode, fontSize, changeFontSize, switchTheme } = useSetting();
+  console.log(mode);
   const handleChangeText = (value: number) => {
-    setFontSize(Math.ceil(value));
+    changeFontSize(Math.ceil(value));
   };
   return (
-    <View style={[styles.root]}>
+    <View
+      style={[
+        styles.root,
+        { backgroundColor: mode === "DARK" ? "black" : "white" },
+      ]}
+    >
       <View style={[styles.container]}>
-        <Text style={[styles.title]}>Dark mode</Text>
+        <Text
+          style={[
+            styles.title,
+            { color: mode === "DARK" ? "white" : "black", fontSize: fontSize },
+          ]}
+        >
+          Dark mode
+        </Text>
         <Switch
           trackColor={{ true: "#18FF1D" }}
           ios_backgroundColor="#7d7a7a"
-          onValueChange={() => {}}
-          value={false}
+          onValueChange={switchTheme}
+          value={mode === "LIGHT" ? false : true}
         />
       </View>
       <View style={[styles.container]}>
-        <Text style={[styles.title]}>Font Size</Text>
-        <Text style={[styles.title]}>{fontSize}</Text>
+        <Text
+          style={[
+            styles.title,
+            { color: mode === "DARK" ? "white" : "black", fontSize: fontSize },
+          ]}
+        >
+          Font Size
+        </Text>
+        <Text
+          style={[styles.title, { color: mode === "DARK" ? "white" : "black" }]}
+        >
+          {fontSize}
+        </Text>
       </View>
       <Slider
         style={{ width: "100%", height: 40 }}
         minimumValue={0}
         maximumValue={48}
-        minimumTrackTintColor="black"
+        minimumTrackTintColor={mode === "DARK" ? "white" : "black"}
         maximumTrackTintColor="grey"
         onValueChange={(value) => {
           handleChangeText(value);
         }}
+        value={fontSize}
       />
       ;
     </View>
@@ -43,7 +68,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "white",
     justifyContent: "center",
     paddingHorizontal: 20,
     gap: 20,

@@ -1,19 +1,21 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { initDatabase } from "./sqlite/sqlite";
 import { useEffect } from "react";
 import { db } from "./sqlite/sqlite";
 import { NavigationContainer } from "@react-navigation/native";
 import { StackNavigtor } from "./Navigator";
+import { SettingContextProvider } from "./context/SettingContext";
 
 export default function App() {
   useEffect(() => {
     initDatabase(db);
   }, []);
   return (
-    <NavigationContainer>
-      <StackNavigtor />
-    </NavigationContainer>
+    <SettingContextProvider>
+      <NavigationContainer>
+        <StackNavigtor />
+      </NavigationContainer>
+    </SettingContextProvider>
   );
 }
 

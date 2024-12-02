@@ -26,7 +26,16 @@ export const useNotes = () => {
     id: number,
     newTitle: string,
     newNote: string,
-  ) => {};
+  ) => {
+    const query = `
+    UPDATE notes
+    SET title = ?, note = ?
+    WHERE id = ?;
+  `;
+
+    await db.runAsync(query, [newTitle, newNote, id]);
+    await read(db);
+  };
   const delete_ = async (db: SQLite.SQLiteDatabase, id: number) => {
     await db.runAsync(`DELETE FROM notes where id=$id;`, id);
     await read(db);

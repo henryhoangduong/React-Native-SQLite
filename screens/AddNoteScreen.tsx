@@ -6,8 +6,10 @@ import { useNotes } from "../services/useNote";
 import { db } from "../sqlite/sqlite";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
+import { useSetting } from "../context/SettingContext";
 
 const AddNoteScreen = () => {
+  const { mode, fontSize, changeFontSize, switchTheme } = useSetting();
   const [note, setNote] = useState({ title: "", note: "" });
   const nav = useNavigation();
 
@@ -37,32 +39,67 @@ const AddNoteScreen = () => {
     nav.navigate("Home" as never);
   };
   return (
-    <View style={[styles.root]}>
+    <View
+      style={[
+        styles.root,
+        { backgroundColor: mode === "DARK" ? "black" : "white" },
+      ]}
+    >
       <TextInput
         onChangeText={(value) => {
           handleChangeText("title", value);
         }}
-        style={[styles.input]}
+        style={[
+          styles.input,
+          {
+            color: mode === "DARK" ? "white" : "black",
+            borderColor: mode === "DARK" ? "white" : "black",
+          },
+        ]}
       />
       <TextInput
         multiline={true}
         numberOfLines={4}
-        style={[styles.input, { height: 100 }]}
+        style={[
+          styles.input,
+          {
+            height: 100,
+            color: mode === "DARK" ? "white" : "black",
+            borderColor: mode === "DARK" ? "white" : "black",
+          },
+        ]}
         onChangeText={(value) => {
           handleChangeText("note", value);
         }}
       />
       <View style={[styles.btnContainer]}>
-        <TouchableOpacity onPress={handleSave} style={[styles.btn]}>
-          <Entypo name="check" size={24} color="white" />
+        <TouchableOpacity
+          onPress={handleSave}
+          style={[
+            styles.btn,
+            { backgroundColor: mode === "DARK" ? "white" : "black" },
+          ]}
+        >
+          <Entypo
+            name="check"
+            size={24}
+            color={mode === "DARK" ? "black" : "white"}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             nav.navigate("Home" as never);
           }}
-          style={[styles.btn]}
+          style={[
+            styles.btn,
+            { backgroundColor: mode === "DARK" ? "white" : "black" },
+          ]}
         >
-          <Entypo name="cross" size={24} color="white" />
+          <Entypo
+            name="cross"
+            size={24}
+            color={mode === "DARK" ? "black" : "white"}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -73,7 +110,6 @@ export default AddNoteScreen;
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: "white",
     flex: 1,
     alignItems: "center",
     gap: 10,

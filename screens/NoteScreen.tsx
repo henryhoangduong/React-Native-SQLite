@@ -8,7 +8,10 @@ import { FlatList } from "react-native";
 import { db } from "../sqlite/sqlite";
 import { useNotes } from "../services/useNote";
 import { Note } from "../types/note";
+import { useSetting } from "../context/SettingContext";
 const NoteScreen = () => {
+  const { mode, fontSize, changeFontSize, switchTheme } = useSetting();
+
   const nav = useNavigation();
   const { notes, read } = useNotes();
   useEffect(() => {
@@ -18,10 +21,27 @@ const NoteScreen = () => {
     return <NoteItem note={note} />;
   };
   return (
-    <View style={[styles.root]}>
-      <Text style={[styles.title]}>Note app</Text>
+    <View
+      style={[
+        styles.root,
+        { backgroundColor: mode === "DARK" ? "black" : "white" },
+      ]}
+    >
+      <Text
+        style={[styles.title, { color: mode === "DARK" ? "white" : "black" }]}
+      >
+        Note app
+      </Text>
       <View style={[styles.addNoteContainer]}>
-        <Text style={[{ fontWeight: "bold", color: "gray", fontSize: 18 }]}>
+        <Text
+          style={[
+            {
+              fontWeight: "bold",
+              fontSize: 18,
+              color: mode === "DARK" ? "white" : "gray",
+            },
+          ]}
+        >
           All notes
         </Text>
         <TouchableOpacity
@@ -29,7 +49,11 @@ const NoteScreen = () => {
             nav.navigate("Addnote" as never);
           }}
         >
-          <AntDesign name="pluscircle" size={24} color="black" />
+          <AntDesign
+            name="pluscircle"
+            size={24}
+            color={mode === "DARK" ? "white" : "black"}
+          />
         </TouchableOpacity>
       </View>
       <FlatList
@@ -37,6 +61,7 @@ const NoteScreen = () => {
         renderItem={renderItem}
         keyExtractor={(todo) => todo.id.toString()}
         ListEmptyComponent={<Text>No notes...</Text>}
+        contentContainerStyle={{ gap: 10 }}
       />
     </View>
   );
